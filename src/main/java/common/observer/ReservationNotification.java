@@ -11,7 +11,8 @@ public class ReservationNotification {
         APPROVED,           // 예약 승인
         REJECTED,           // 예약 거절
         CHANGE_APPROVED,    // 변경 승인
-        CHANGE_REJECTED     // 변경 거절
+        CHANGE_REJECTED,    // 변경 거절
+        CANCELLED           // 예약 취소
     }
     
     private final String userId;
@@ -61,6 +62,7 @@ public class ReservationNotification {
             case REJECTED: return "거절";
             case CHANGE_APPROVED: return "변경 승인";
             case CHANGE_REJECTED: return "변경 거절";
+            case CANCELLED: return "취소";
             default: return "처리";
         }
     }
