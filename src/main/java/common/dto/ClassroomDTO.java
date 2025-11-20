@@ -35,6 +35,19 @@ public class ClassroomDTO implements Serializable {
         return String.format("%s,%s,%d", name, type, capacity);
     }
     
+    // Getter 메서드 추가
+    public String getRoomName() {
+        return name;
+    }
+    
+    public String getType() {
+        return type;
+    }
+    
+    public int getCapacity() {
+        return capacity;
+    }
+    
     public static ClassroomDTO fromProtocol(String protocol) {
         String[] parts = protocol.split(",");
         if (parts.length >= 3) {
