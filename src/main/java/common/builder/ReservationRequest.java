@@ -28,6 +28,18 @@ public class ReservationRequest {
         this.userId = builder.userId;
     }
 
+    // Getter 메서드들
+    public String getUserName() { return userName; }
+    public String getRoom() { return room; }
+    public String getDate() { return date; }
+    public String getDay() { return day; }
+    public String getTime() { return time; }
+    public String getEndTime() { return endTime; }
+    public String getPurpose() { return purpose; }
+    public String getUserRole() { return userRole; }
+    public int getStudentCount() { return studentCount; }
+    public String getUserId() { return userId; }
+
     public String toProtocolString() {
         return String.format("RESERVE_REQUEST,%s,%s,%s,%s,%s,%s,%s,%d,%s",
             userName, room, date, day, time, purpose, userRole, studentCount, userId);
