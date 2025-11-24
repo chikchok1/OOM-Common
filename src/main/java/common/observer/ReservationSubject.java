@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Subject - 예약 상태 변경을 클라이언트에게 알림 (서버-클라이언트 통신 버전)
+ * ✅ 오프라인 알림 저장 기능 추가
  */
 public class ReservationSubject {
     
@@ -14,6 +15,9 @@ public class ReservationSubject {
     
     // userId별로 PrintWriter(소켓 출력 스트림) 관리
     private final Map<String, List<PrintWriter>> clientWriters;
+    
+    // ✅ 오프라인 알림 관리자
+    private OfflineNotificationManager offlineManager;
     
     private ReservationSubject() {
         this.clientWriters = new ConcurrentHashMap<>();
@@ -24,6 +28,15 @@ public class ReservationSubject {
             instance = new ReservationSubject();
         }
         return instance;
+    }
+    
+    /**
+     * ✅ 오프라인 알림 관리자 초기화 (서버 시작 시 호출)
+     * @param baseDir 데이터 디렉토리
+     */
+    public void initializeOfflineManager(String baseDir) {
+        this.offlineManager = OfflineNotificationManager.getInstance(baseDir);
+        System.out.println("[오프라인 알림] 관리자 초기화 완료");
     }
     
     /**
@@ -55,6 +68,7 @@ public class ReservationSubject {
     
     /**
      * 특정 사용자에게 알림 전송 (서버에서 호출)
+     * ✅ 온라인 사용자에게는 즉시 전송, 오프라인은 저장
      * @param notification 알림 정보
      */
     public void notifyUser(ReservationNotification notification) {
@@ -62,9 +76,9 @@ public class ReservationSubject {
         List<PrintWriter> writers = clientWriters.get(userId);
         
         if (writers != null && !writers.isEmpty()) {
+            // ✅ 온라인: 즉시 전송
             System.out.println("[Observer] " + userId + "에게 알림 전송: " + notification.getMessage());
             
-            // 알림 메시지를 소켓으로 전송
             String notificationMessage = createNotificationMessage(notification);
             
             synchronized (writers) {
@@ -77,8 +91,17 @@ public class ReservationSubject {
                     }
                 }
             }
+            System.out.println("[Observer 패턴] " + userId + "에게 알림 전송 완료");
         } else {
-            System.out.println("[Observer] " + userId + "에게 등록된 클라이언트가 없습니다.");
+            // ✅ 오프라인: 파일로 저장
+            System.out.println("[Observer] " + userId + "에게 등록된 클라이언트가 없습니다. ➡️ 오프라인 알림 저장");
+            
+            if (offlineManager != null) {
+                offlineManager.saveNotification(userId, notification);
+                System.out.println("[오프라인 알림] " + userId + "의 알림 저장 완료");
+            } else {
+                System.err.println("[오프라인 알림] 관리자가 초기화되지 않았습니다.");
+            }
         }
     }
     
