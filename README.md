@@ -236,8 +236,8 @@ String ip = ConfigLoader.getProperty("server.ip");
 
 ## 🔗 관련 프로젝트
 
-- [OOM-Client](../OOM-Client) - Swing GUI 클라이언트
-- [OOM-Server](../OOM-Server) - 멀티스레드 서버
+- [OOM-Client](https://github.com/chikchok1/OOM-Client) - Swing GUI 클라이언트
+- [OOM-Server](https://github.com/chikchok1/OOM-Server) - 멀티스레드 서버
 
 ---
 
